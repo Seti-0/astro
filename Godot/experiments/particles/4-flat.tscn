@@ -1,0 +1,98 @@
+[gd_scene load_steps=10 format=3 uid="uid://bykf6dje1i6eu"]
+
+[sub_resource type="Shader" id="Shader_4fy7r"]
+code = "shader_type spatial;
+render_mode unshaded, blend_add;
+
+uniform sampler2D profile;
+uniform sampler2D colors;
+uniform sampler2D noise;
+
+void vertex() {
+	
+	// Billboard Display.
+	
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(
+		INV_VIEW_MATRIX[0],
+		INV_VIEW_MATRIX[1],
+		INV_VIEW_MATRIX[2],
+		MODEL_MATRIX[3]
+	);
+	
+	// Take model scaling into account.
+	
+	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(
+		vec4(length(MODEL_MATRIX[0].xyz), 0., 0., 0.),
+		vec4(0., length(MODEL_MATRIX[1].xyz), 0., 0.),
+		vec4(MODEL_MATRIX[2].xyz, 0.),
+		vec4(0., 0., 0., 1.)
+	);
+	
+}
+
+void fragment() {
+	
+	float x = abs(UV.x * 2. - 1.);
+	float y = UV.y;
+	
+	float noiseA = texture(noise, vec2(TIME + x, TIME + y)).x;
+	float noiseB = texture(noise, vec2(TIME + y, TIME + x)).x;
+	
+	float noisy_y = clamp(y - noiseA*0.02, 0., 1.);
+	
+	float shift = texture(profile, vec2(y, 0)).r + noiseB*0.;
+	
+	float p = clamp(shift - x, 0., 1.);
+	
+	ALBEDO = texture(colors, vec2(p*0.98, 0)).rgb;
+	if (p < 0.04) {
+		ALPHA = p * 25.;
+	}
+	
+	float y1 = 0.5;
+	float y2 = 0.65;
+	float m = 1./(y1 - y2);
+	float c = -m * y2;
+	float a = clamp(m*y + c, 0, 1);
+	ALPHA *= a;
+	
+	ALBEDO += texture(noise, UV + vec2(0, -TIME)).rgb * 0.2;
+	
+}
+"
+
+[sub_resource type="Gradient" id="Gradient_jlgjb"]
+offsets = PackedFloat32Array(0, 0.122995, 0.68984)
+colors = PackedColorArray(0.906423, 0.441203, 0.0597508, 1, 0.9, 0.405, 0, 1, 0.997261, 0.953219, 0.904807, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_du6ly"]
+gradient = SubResource("Gradient_jlgjb")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1s1tu"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kyicx"]
+noise = SubResource("FastNoiseLite_1s1tu")
+
+[sub_resource type="Curve" id="Curve_ytrei"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.16055, 1), -3.53514, -3.53514, 0, 0, Vector2(0.844037, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_qhmfx"]
+texture_mode = 1
+curve = SubResource("Curve_ytrei")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tuaug"]
+render_priority = 0
+shader = SubResource("Shader_4fy7r")
+shader_parameter/profile = SubResource("CurveTexture_qhmfx")
+shader_parameter/colors = SubResource("GradientTexture1D_du6ly")
+shader_parameter/noise = SubResource("NoiseTexture2D_kyicx")
+
+[sub_resource type="QuadMesh" id="QuadMesh_s1up2"]
+material = SubResource("ShaderMaterial_tuaug")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-8.74228e-09, 0, -1, 0, 1, 0, 0.2, 0, -4.37114e-08, 0, -0.326784, 0)
+mesh = SubResource("QuadMesh_s1up2")

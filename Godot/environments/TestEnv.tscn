@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccxm3j6efbs8d"]
+
+[sub_resource type="Environment" id="Environment_dnyp3"]
+background_mode = 1
+background_color = Color(0.223529, 0.180392, 0.243137, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_2fd75"]
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_dnyp3")
+camera_attributes = SubResource("CameraAttributesPractical_2fd75")

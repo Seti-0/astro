@@ -1,0 +1,121 @@
+[gd_scene load_steps=15 format=3 uid="uid://b7723pgrukyql"]
+
+[sub_resource type="Gradient" id="Gradient_hacf5"]
+colors = PackedColorArray(0.19, 0, 0, 1, 1, 0.219608, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dktrr"]
+gradient = SubResource("Gradient_hacf5")
+
+[sub_resource type="Curve" id="Curve_1ajnw"]
+min_value = -1.0
+_data = [Vector2(0.0046729, 14.5454), 0.0, 0.0, 0, 0, Vector2(0.981308, 200), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tpfpj"]
+curve = SubResource("Curve_1ajnw")
+
+[sub_resource type="Curve" id="Curve_jp148"]
+_data = [Vector2(0, 0.263636), 0.0, 0.0, 0, 0, Vector2(0.38785, 0.418182), -0.233454, -0.233454, 0, 0, Vector2(1, 0), -0.0209188, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_wg6vq"]
+curve = SubResource("Curve_jp148")
+
+[sub_resource type="Curve" id="Curve_n72at"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_aluun"]
+curve = SubResource("Curve_n72at")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nrpgp"]
+direction = Vector3(0, 0, 0)
+spread = 5.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.3
+initial_velocity_max = 0.3
+linear_accel_max = 0.02
+linear_accel_curve = SubResource("CurveTexture_tpfpj")
+tangential_accel_min = 0.01
+tangential_accel_max = 0.01
+tangential_accel_curve = SubResource("CurveTexture_aluun")
+scale_min = 3.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_wg6vq")
+color_ramp = SubResource("GradientTexture1D_dktrr")
+
+[sub_resource type="Shader" id="Shader_e0ovd"]
+code = "shader_type spatial;
+
+render_mode unshaded;
+
+uniform sampler2D NOISE_PATTERN;
+
+void vertex()
+{
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(
+		INV_VIEW_MATRIX[0], 
+		INV_VIEW_MATRIX[1], 
+		INV_VIEW_MATRIX[2], 
+		MODEL_MATRIX[3]
+	);
+	
+	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(
+		vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), 
+		vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), 
+		vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), 
+		vec4(0.0, 0.0, 0.0, 1.0)
+	);
+	
+}
+
+void fragment() {
+	
+	vec2 noiseUV = UV*0.6;
+	noiseUV.y += 1. + 0.5*sin(TIME);
+	float noise = texture(NOISE_PATTERN, UV*0.).x;
+	
+	vec2 uv = 2.*UV - 1.;
+	float dist = pow(uv.x, 2) + pow(uv.y, 2);
+	dist /= noise * 1.5;
+
+	ALBEDO = COLOR.xyz * noise * 1.5;
+	ALPHA =  max(0., 1. - dist) * COLOR.a;
+	
+	/*if (dist < 0.5) {
+		ALPHA = 1.;
+	}
+	else {
+		ALPHA = 0.;
+		//ALPHA = max(0., 1. - dist);
+	}
+	
+	ALPHA *= COLOR.a;
+	*/
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_u63bu"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uet4l"]
+noise = SubResource("FastNoiseLite_u63bu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0b5d7"]
+render_priority = 0
+shader = SubResource("Shader_e0ovd")
+shader_parameter/NOISE_PATTERN = SubResource("NoiseTexture2D_uet4l")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8sv8a"]
+material = SubResource("ShaderMaterial_0b5d7")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(-2.18557e-07, 0, -5, 0, 5, 0, 5, 0, -2.18557e-07, 0, 0, 0)
+amount = 15
+draw_order = 3
+trail_lifetime = 1.0
+process_material = SubResource("ParticleProcessMaterial_nrpgp")
+draw_pass_1 = SubResource("QuadMesh_8sv8a")

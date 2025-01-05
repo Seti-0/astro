@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://cavul5xk5yt2r"]
+
+[ext_resource type="PackedScene" uid="uid://ccxm3j6efbs8d" path="res://environments/TestEnv.tscn" id="1_kqfjp"]
+[ext_resource type="Script" path="res://meshes/generation/asteroids/AsteroidGen.gd" id="2_xrhn3"]
+[ext_resource type="Script" path="res://meshes/generation/MeshGenUtil.gd" id="3_veffc"]
+[ext_resource type="PackedScene" uid="uid://dpepegrxyoa1t" path="res://meshes/generation/MeshGenUI.tscn" id="4_do7pc"]
+
+[sub_resource type="Resource" id="Resource_agtwm"]
+script = ExtResource("3_veffc")
+smooth = false
+gen_scale = 1.0
+
+[sub_resource type="GDScript" id="GDScript_1yjyp"]
+script/source = "extends Node2D
+
+func _draw():
+	self.draw_rect(Rect2(0, 0, 10, 10), Color.BLUE_VIOLET)
+
+func _ready():
+	pass
+
+func _process(_delta):
+	pass
+"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_kqfjp")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.886769, 0.462213, 0, -0.462213, 0.886769, 0, 0.96228, 1.75087)
+
+[node name="Asteroid" type="MeshInstance3D" parent="."]
+script = ExtResource("2_xrhn3")
+generator = SubResource("Resource_agtwm")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.862602, -1.28538e-08, -0.505883, 0.16118, 0.947885, 0.274835, 0.479519, -0.318612, 0.817648, 0, 0, 0)
+light_energy = 0.6
+
+[node name="UI" parent="." instance=ExtResource("4_do7pc")]
+
+[node name="Node" type="Node" parent="."]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Node"]
+offset_left = 151.0
+offset_top = 176.0
+offset_right = 191.0
+offset_bottom = 216.0
+
+[node name="SubViewport" type="SubViewport" parent="Node/SubViewportContainer"]
+disable_3d = true
+handle_input_locally = false
+gui_disable_input = true
+size = Vector2i(64, 64)
+render_target_update_mode = 4
+
+[node name="Node2D" type="Node2D" parent="Node/SubViewportContainer/SubViewport"]
+script = SubResource("GDScript_1yjyp")

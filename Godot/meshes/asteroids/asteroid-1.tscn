@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://m4boq3dj7cw3"]
+
+[ext_resource type="ArrayMesh" uid="uid://d050ulgl68212" path="res://meshes/asteroids/asteroid-1.tres" id="1_s77mb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nqgeh"]
+radius = 0.52472
+height = 1.44808
+
+[node name="asteroid-1" type="RigidBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_s77mb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.259982, -0.965613, 0, 0.965613, -0.259982, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_nqgeh")

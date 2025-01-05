@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://cavul5xk5yt2r"]
+
+[ext_resource type="PackedScene" uid="uid://ccxm3j6efbs8d" path="res://environments/TestEnv.tscn" id="1_kqfjp"]
+[ext_resource type="Script" path="res://meshes/generation/planets/PlanetGen.gd" id="2_cwryj"]
+[ext_resource type="PackedScene" uid="uid://dpepegrxyoa1t" path="res://meshes/generation/MeshGenUI.tscn" id="4_do7pc"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_68ss1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b6pqi"]
+albedo_color = Color(0, 0.501961, 1, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_kqfjp")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.886769, 0.462213, 0, -0.462213, 0.886769, 0, 0.96228, 1.75087)
+
+[node name="Planet" type="MeshInstance3D" parent="."]
+script = ExtResource("2_cwryj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.862602, -1.28538e-08, -0.505883, 0.16118, 0.947885, 0.274835, 0.479519, -0.318612, 0.817648, 0, 0, 0)
+light_energy = 0.6
+
+[node name="UI" parent="." instance=ExtResource("4_do7pc")]
+
+[node name="Ocean" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_68ss1")
+surface_material_override/0 = SubResource("StandardMaterial3D_b6pqi")

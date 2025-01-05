@@ -1,0 +1,82 @@
+[gd_scene load_steps=6 format=3 uid="uid://cbycj7c0huv16"]
+
+[ext_resource type="Script" path="res://meshes/generation/PropertyEditor.gd" id="1_xbvia"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7jblo"]
+bg_color = Color(0.247059, 0.247059, 0.247059, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a231j"]
+content_margin_left = 30.0
+draw_center = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ogelf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r7jv7"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[node name="Background Panel" type="PanelContainer" node_paths=PackedStringArray("properties_container", "centered_view", "center_separator", "title_label", "scroll_container")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -142.5
+offset_right = -147.0
+offset_bottom = 102.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7jblo")
+script = ExtResource("1_xbvia")
+properties_container = NodePath("VBoxContainer/ScrollContainer/Margin Panel/Properties")
+centered_view = NodePath("VBoxContainer/CenterContainer")
+center_separator = NodePath("VBoxContainer/Separator")
+title_label = NodePath("VBoxContainer/PanelContainer/HBoxContainer/TitlePanel")
+scroll_container = NodePath("VBoxContainer/ScrollContainer")
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TitlePanel" type="Label" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_a231j")
+
+[node name="Close Button" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = " X "
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Separator" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ogelf")
+
+[node name="Margin Panel" type="PanelContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r7jv7")
+
+[node name="Properties" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/Margin Panel"]
+layout_mode = 2
+
+[connection signal="gui_input" from="VBoxContainer/PanelContainer/HBoxContainer/TitlePanel" to="." method="_on_drag_panel_gui_input"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/Close Button" to="." method="_on_close_button_pressed"]
+[connection signal="gui_input" from="VBoxContainer/Separator" to="." method="_on_drag_panel_gui_input"]

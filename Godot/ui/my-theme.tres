@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MyTheme" load_steps=2 format=3 uid="uid://cqnhu4fdxmb7c"]
+
+[ext_resource type="Script" path="res://ui/MyTheme.gd" id="1_17qu4"]
+
+[resource]
+script = ExtResource("1_17qu4")
+axis_red = Color(1, 0.14902, 0.231373, 1)
+axis_green = Color(0.486275, 1, 0.368627, 1)
+selection_reticle = Color(1, 1, 1, 1)

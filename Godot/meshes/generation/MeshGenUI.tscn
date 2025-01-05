@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=3 uid="uid://dpepegrxyoa1t"]
+
+[ext_resource type="Script" path="res://meshes/generation/GenUI.gd" id="1_mwa57"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ild7v"]
+bg_color = Color(1, 0.458824, 0.439216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2rdp"]
+bg_color = Color(0, 0.713726, 0.431373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44bt2"]
+bg_color = Color(0.556863, 0.52549, 1, 1)
+
+[node name="UI" type="Control" node_paths=PackedStringArray("vertex_count_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mwa57")
+vertex_count_label = NodePath("Label - Vertex Count")
+
+[node name="BottomLeft" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="BottomLeft"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = -175.0
+offset_right = 113.0
+offset_bottom = 46.0
+
+[node name="Rotation Label" type="Label" parent="BottomLeft/VBox"]
+layout_mode = 2
+text = "Rotation"
+horizontal_alignment = 1
+
+[node name="Rotation X Slider" type="HSlider" parent="BottomLeft/VBox"]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_ild7v")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_ild7v")
+value = 50.0
+
+[node name="Rotation Y Slider" type="HSlider" parent="BottomLeft/VBox"]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_b2rdp")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_b2rdp")
+value = 50.0
+
+[node name="Rotation Z Slider" type="HSlider" parent="BottomLeft/VBox"]
+layout_mode = 2
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_44bt2")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_44bt2")
+value = 50.0
+
+[node name="Rotate Labeled Check" type="HBoxContainer" parent="BottomLeft/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="BottomLeft/VBox/Rotate Labeled Check"]
+layout_mode = 2
+text = "Rotate"
+
+[node name="Rotate Check" type="CheckBox" parent="BottomLeft/VBox/Rotate Labeled Check"]
+layout_mode = 2
+alignment = 1
+icon_alignment = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 30.0
+offset_right = -30.0
+grow_horizontal = 0
+text = "Open Property Editor"
+
+[node name="Label - Vertex Count" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.046875
+anchor_top = 0.0509259
+anchor_right = 0.12066
+anchor_bottom = 0.0555556
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Vertex Count: ??"
+metadata/_edit_use_anchors_ = true
+
+[connection signal="value_changed" from="BottomLeft/VBox/Rotation X Slider" to="." method="_on_x_slider_value_changed"]
+[connection signal="value_changed" from="BottomLeft/VBox/Rotation Y Slider" to="." method="_on_y_slider_value_changed"]
+[connection signal="value_changed" from="BottomLeft/VBox/Rotation Z Slider" to="." method="_on_z_slider_value_changed"]
+[connection signal="toggled" from="BottomLeft/VBox/Rotate Labeled Check/Rotate Check" to="." method="_on_rotate_check_toggled"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

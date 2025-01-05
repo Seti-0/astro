@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://rr7a46k1hxdr"]
+
+[ext_resource type="Script" path="res://entities/PlayerShip.gd" id="1_psjhq"]
+[ext_resource type="PackedScene" uid="uid://crlypuwceimpt" path="res://bodies/ship.tscn" id="2_htcy8"]
+
+[node name="PlayerShip" type="Node" node_paths=PackedStringArray("ship")]
+script = ExtResource("1_psjhq")
+ship = NodePath("Ship")
+
+[node name="Ship" parent="." instance=ExtResource("2_htcy8")]

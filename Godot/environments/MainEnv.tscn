@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5cijegla35uf"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_l6yff"]
+sky_top_color = Color(0, 0, 0, 1)
+sky_horizon_color = Color(0, 0, 0, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_wiycf"]
+sky_material = SubResource("ProceduralSkyMaterial_l6yff")
+
+[sub_resource type="Environment" id="Environment_0c6lx"]
+background_mode = 2
+sky = SubResource("Sky_wiycf")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_e2tns"]
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_0c6lx")
+camera_attributes = SubResource("CameraAttributesPractical_e2tns")

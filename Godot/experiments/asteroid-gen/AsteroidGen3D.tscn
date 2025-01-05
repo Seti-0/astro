@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://bc6xxyjeuv6s7"]
+
+[ext_resource type="Script" path="res://experiments/asteroid-gen/AsteroidGen3D.gd" id="1_fe87v"]
+[ext_resource type="Script" path="res://experiments/TestCamera.gd" id="2_upp65"]
+[ext_resource type="PackedScene" uid="uid://ccxm3j6efbs8d" path="res://environments/TestEnv.tscn" id="3_ioyop"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_o0qmp"]
+
+[node name="AsteroidGen3D" type="Node"]
+
+[node name="AsteroidGen" type="Node3D" parent="."]
+script = ExtResource("1_fe87v")
+mesh = SubResource("SphereMesh_o0qmp")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.857455, 0.514559, 0, -0.514559, 0.857455, 0, 1, 1.48213)
+script = ExtResource("2_upp65")
+speed = 4.0
+zoom_speed = 4.0
+
+[node name="WorldEnvironment" parent="." instance=ExtResource("3_ioyop")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.489367, 0.368859, -0.790229, 0, 0.906145, 0.422966, 0.872078, -0.206986, 0.443438, 0, 0, 0)

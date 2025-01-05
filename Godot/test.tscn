@@ -1,0 +1,147 @@
+[gd_scene load_steps=15 format=3 uid="uid://cy6oyjjrrmeqy"]
+
+[sub_resource type="Environment" id="Environment_dnyp3"]
+background_mode = 1
+background_color = Color(0.223529, 0.180392, 0.243137, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_2fd75"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f7cpu"]
+bounce = 0.46
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4my65"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4rfmb"]
+albedo_color = Color(0.984314, 0.219608, 0.419608, 1)
+clearcoat_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_6hwkx"]
+material = SubResource("StandardMaterial3D_4rfmb")
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_82vsj"]
+albedo_color = Color(0, 0.788235, 0.364706, 1)
+clearcoat_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_6jtwg"]
+material = SubResource("StandardMaterial3D_82vsj")
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="GDScript" id="GDScript_2n8pp"]
+script/source = "extends RigidBody3D
+
+func _physics_process(_delta):
+	if Input.is_action_pressed(\"TestLeft\"):
+		self.apply_torque(Vector3(0, 1, 0))
+	if Input.is_action_pressed(\"TestRight\"):
+		self.apply_torque(Vector3(0, -1, 0))
+	if Input.is_action_pressed(\"TestUp\"):
+		self.apply_central_force(-self.transform.basis.z)
+	if Input.is_action_pressed(\"TestDown\"):
+		self.apply_central_force(self.transform.basis.z)
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_48mv7"]
+albedo_color = Color(0.517647, 0.447059, 1, 1)
+clearcoat_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_e21cm"]
+material = SubResource("StandardMaterial3D_48mv7")
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ffaeq"]
+size = Vector3(0.1, 1, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_naecr"]
+points = PackedVector3Array(0.05, 0.5, 0.5, -0.05, 0.5, 0.5, 0.05, -0.5, 0.5, 0.05, 0.5, -0.5, -0.05, 0.5, -0.5, -0.05, -0.5, 0.5, 0.05, -0.5, -0.5, -0.05, -0.5, -0.5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_kwlo1"]
+points = PackedVector3Array(0.05, 0.5, 0.5, -0.05, 0.5, 0.5, 0.05, -0.5, 0.5, 0.05, 0.5, -0.5, -0.05, 0.5, -0.5, -0.05, -0.5, 0.5, 0.05, -0.5, -0.5, -0.05, -0.5, -0.5)
+
+[node name="Node3D" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.761895, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.836458, 4.19833e-08, -0.54803, 0.379812, 0.72089, 0.579707, 0.39507, -0.69305, 0.602994, -1.38124, 0.479573, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dnyp3")
+camera_attributes = SubResource("CameraAttributesPractical_2fd75")
+
+[node name="Red Block" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77875, 0)
+physics_material_override = SubResource("PhysicsMaterial_f7cpu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Red Block"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("BoxShape3D_4my65")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Red Block"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+mesh = SubResource("BoxMesh_6hwkx")
+
+[node name="Green Block" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.224339, 0.77875, -0.906674)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Green Block"]
+shape = SubResource("BoxShape3D_4my65")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Green Block"]
+transform = Transform3D(0.998689, -0.0511856, 0, 0.0511856, 0.998689, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_6jtwg")
+
+[node name="Blue Block" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.07122, 0.77875, 4.00425)
+inertia = Vector3(1, 1, 1)
+script = SubResource("GDScript_2n8pp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Blue Block"]
+shape = SubResource("BoxShape3D_4my65")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Blue Block"]
+mesh = SubResource("BoxMesh_e21cm")
+
+[node name="Camera3D" type="Camera3D" parent="Blue Block"]
+transform = Transform3D(1, 0, 0, 0, 0.964829, 0.26288, 0, -0.26288, 0.964829, 0, 0.367832, 0.924245)
+
+[node name="Grey Thing" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00865, 0)
+
+[node name="LeftMesh" type="MeshInstance3D" parent="Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
+mesh = SubResource("BoxMesh_ffaeq")
+
+[node name="LeftCollision" type="CollisionShape3D" parent="Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_naecr")
+
+[node name="RightMesh" type="MeshInstance3D" parent="Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+mesh = SubResource("BoxMesh_ffaeq")
+
+[node name="RightCollision" type="CollisionShape3D" parent="Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_kwlo1")
+
+[node name="Second Grey Thing" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.94707, 1.15435, 3.04135)
+
+[node name="LeftMesh" type="MeshInstance3D" parent="Second Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.16931, 0)
+mesh = SubResource("BoxMesh_ffaeq")
+
+[node name="LeftCollision" type="CollisionShape3D" parent="Second Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_naecr")
+
+[node name="RightMesh" type="MeshInstance3D" parent="Second Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+mesh = SubResource("BoxMesh_ffaeq")
+
+[node name="RightCollision" type="CollisionShape3D" parent="Second Grey Thing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_kwlo1")

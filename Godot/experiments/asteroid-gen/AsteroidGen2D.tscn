@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq4e3obathpcv"]
+
+[ext_resource type="Script" path="res://experiments/asteroid-gen/AsteroidGen2D.gd" id="1_0xxi3"]
+
+[sub_resource type="Gradient" id="Gradient_ct3rw"]
+offsets = PackedFloat32Array(0, 0.360424, 0.678445, 1)
+colors = PackedColorArray(0.409331, 1, 0.99379, 1, 0.186625, 0.172377, 0.935231, 1, 0.75, 0, 1, 1, 0.954302, 0, 0.222952, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ixq86"]
+gradient = SubResource("Gradient_ct3rw")
+
+[node name="Root" type="Node"]
+
+[node name="AsteroidGen" type="Node2D" parent="."]
+position = Vector2(96, 93)
+script = ExtResource("1_0xxi3")
+colors = SubResource("GradientTexture1D_ixq86")

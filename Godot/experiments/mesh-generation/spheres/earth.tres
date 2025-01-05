@@ -1,0 +1,38 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://cxrflgkv8iubp"]
+
+[sub_resource type="Shader" id="Shader_klmdv"]
+code = "shader_type spatial;
+
+uniform sampler3D noise;
+varying vec3 world_pos;
+uniform sampler2D colors;
+
+#include \"res://shaders/3d-noise.gdshaderinc\"
+
+void vertex() {
+	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1)).xyz;
+	VERTEX *= 1. + simplex_noise(world_pos * 10.) * 0.2;
+}
+
+void fragment() {
+	
+	float color_noise = 0.5 + simplex_noise(world_pos * 10.) * 0.5;
+	vec3 color = texture(colors, vec2(color_noise, 0)).rgb;
+	ALBEDO = color;
+}
+"
+
+[sub_resource type="Gradient" id="Gradient_mhrmj"]
+offsets = PackedFloat32Array(0, 0.466887, 0.837748)
+colors = PackedColorArray(0.360422, 0.701472, 1, 1, 0, 0.409008, 0, 1, 0.53, 0.150167, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7jft3"]
+gradient = SubResource("Gradient_mhrmj")
+
+[sub_resource type="ImageTexture3D" id="ImageTexture3D_e1qpb"]
+
+[resource]
+render_priority = 0
+shader = SubResource("Shader_klmdv")
+shader_parameter/noise = SubResource("ImageTexture3D_e1qpb")
+shader_parameter/colors = SubResource("GradientTexture1D_7jft3")
